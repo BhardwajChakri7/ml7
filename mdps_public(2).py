@@ -89,7 +89,6 @@ with col2:
 
 # code for Prediction
 parkinsons_diagnosis = ''
-bc=''
 
 # creating a button for Prediction    
 if st.button("Parkinson's Test Result"):
@@ -97,9 +96,7 @@ if st.button("Parkinson's Test Result"):
     
     if (parkinsons_prediction[0] == 1):
       parkinsons_diagnosis = "The person has Parkinson's disease"
-      bc='Basic medication :Levodopa'
     else:
       parkinsons_diagnosis = "The person does not have Parkinson's disease"
     
 st.success(parkinsons_diagnosis)
-st.success(bc)
