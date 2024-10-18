@@ -1,7 +1,7 @@
 import pickle
 import streamlit as st
 
-# Loading the saved models
+# Loading the saved model
 parkinsons_model = pickle.load(open('parkinson_model.sav', 'rb'))
 
 # Page title
@@ -47,38 +47,54 @@ h1, h2, h3, h4, h5, h6, p {
     color: white;
     text-align: center;
 }
-.text-input {
-    background-color: rgba(255, 255, 255, 1);
-    border: 1px solid #FF6347;
-    border-radius: 5px;
-    padding: 10px;
+input {
+    background-color: white !important; /* Set input background to white */
+    color: black !important; /* Set input text color to black */
+    border: 1px solid #FF6347; /* Border color */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px; /* Padding inside the input box */
 }
 </style>
 """, unsafe_allow_html=True)
 
+# Function to create text inputs with ranges
+def create_input(label, default_value, min_value, max_value, step):
+    return st.number_input(label, value=default_value, min_value=min_value, max_value=max_value, step=step)
+
 # Input fields in columns
 col1, col2, col3, col4, col5 = st.columns(5)
 
-# List of input labels and their default values
+# List of input labels and their properties
 inputs = [
-    ('MDVP:Fo(Hz)', '150.0'), ('MDVP:Fhi(Hz)', '200.0'), 
-    ('MDVP:Flo(Hz)', '100.0'), ('MDVP:Jitter(%)', '0.5'), 
-    ('MDVP:Jitter(Abs)', '0.002'), ('MDVP:RAP', '0.3'), 
-    ('MDVP:PPQ', '0.4'), ('Jitter:DDP', '0.1'), 
-    ('MDVP:Shimmer', '0.5'), ('MDVP:Shimmer(dB)', '0.2'), 
-    ('Shimmer:APQ3', '0.3'), ('Shimmer:APQ5', '0.4'), 
-    ('MDVP:APQ', '0.5'), ('Shimmer:DDA', '0.3'), 
-    ('NHR', '0.2'), ('HNR', '20.0'), 
-    ('RPDE', '0.3'), ('DFA', '0.5'), 
-    ('spread1', '0.5'), ('spread2', '0.5'), 
-    ('D2', '2.0'), ('PPE', '0.5')
+    ('MDVP:Fo(Hz)', 150.0, 0.0, 300.0, 0.1),
+    ('MDVP:Fhi(Hz)', 200.0, 0.0, 300.0, 0.1),
+    ('MDVP:Flo(Hz)', 100.0, 0.0, 300.0, 0.1),
+    ('MDVP:Jitter(%)', 0.5, 0.0, 5.0, 0.01),
+    ('MDVP:Jitter(Abs)', 0.002, 0.0, 0.1, 0.0001),
+    ('MDVP:RAP', 0.3, 0.0, 1.0, 0.01),
+    ('MDVP:PPQ', 0.4, 0.0, 1.0, 0.01),
+    ('Jitter:DDP', 0.1, 0.0, 1.0, 0.01),
+    ('MDVP:Shimmer', 0.5, 0.0, 1.0, 0.01),
+    ('MDVP:Shimmer(dB)', 0.2, 0.0, 1.0, 0.01),
+    ('Shimmer:APQ3', 0.3, 0.0, 1.0, 0.01),
+    ('Shimmer:APQ5', 0.4, 0.0, 1.0, 0.01),
+    ('MDVP:APQ', 0.5, 0.0, 1.0, 0.01),
+    ('Shimmer:DDA', 0.3, 0.0, 1.0, 0.01),
+    ('NHR', 0.2, 0.0, 1.0, 0.01),
+    ('HNR', 20.0, 0.0, 50.0, 0.1),
+    ('RPDE', 0.3, 0.0, 1.0, 0.01),
+    ('DFA', 0.5, 0.0, 1.0, 0.01),
+    ('spread1', 0.5, 0.0, 1.0, 0.01),
+    ('spread2', 0.5, 0.0, 1.0, 0.01),
+    ('D2', 2.0, 0.0, 5.0, 0.1),
+    ('PPE', 0.5, 0.0, 1.0, 0.01)
 ]
 
-# Create text inputs dynamically with default values
+# Create text inputs dynamically
 input_values = {}
-for i, (label, default) in enumerate(inputs):
+for i, (label, default, min_val, max_val, step) in enumerate(inputs):
     col = [col1, col2, col3, col4, col5][i % 5]
-    input_values[label] = col.text_input(label, key=label, value=default)
+    input_values[label] = create_input(label, default, min_val, max_val, step)
 
 # Prediction logic
 parkinsons_diagnosis = ''
@@ -87,7 +103,7 @@ parkinsons_diagnosis = ''
 if st.button("Parkinson's Test Result"):
     try:
         # Ensure we use the correct keys from input_values
-        input_data = [float(input_values[label]) for label, _ in inputs]
+        input_data = [float(input_values[label]) for label, _, _, _, _ in inputs]
         parkinsons_prediction = parkinsons_model.predict([input_data])                          
         
         if (parkinsons_prediction[0] == 1):
