@@ -2,16 +2,16 @@ import pickle
 import streamlit as st
 from streamlit_option_menu import option_menu
 
-
 # loading the saved models
-
 parkinsons_model = pickle.load(open('parkinson_model.sav', 'rb'))
 
 # page title
 st.title("Parkinson's Disease Prediction using ML")
 
-col1, col2, col3, col4, col5 = st.columns(5)  
+# Create columns for input fields
+col1, col2, col3, col4, col5 = st.columns(5)
 
+# Input fields for the model features
 with col1:
     fo = st.text_input('MDVP:Fo(Hz)')
     
@@ -77,19 +77,33 @@ with col1:
     
 with col2:
     PPE = st.text_input('PPE')
-    
-
 
 # code for Prediction
 parkinsons_diagnosis = ''
 
 # creating a button for Prediction    
 if st.button("Parkinson's Test Result"):
-    parkinsons_prediction = parkinsons_model.predict([[fo, fhi, flo, Jitter_percent, Jitter_Abs, RAP, PPQ,DDP,Shimmer,Shimmer_dB,APQ3,APQ5,APQ,DDA,NHR,HNR,RPDE,DFA,spread1,spread2,D2,PPE]])                          
+    parkinsons_prediction = parkinsons_model.predict([[fo, fhi, flo, Jitter_percent, Jitter_Abs, RAP, PPQ, DDP, Shimmer, Shimmer_dB, APQ3, APQ5, APQ, DDA, NHR, HNR, RPDE, DFA, spread1, spread2, D2, PPE]])
     
     if (parkinsons_prediction[0] == 1):
-      parkinsons_diagnosis = "The person has Parkinson's disease"
+        parkinsons_diagnosis = "The person has Parkinson's disease"
     else:
-      parkinsons_diagnosis = "The person does not have Parkinson's disease"
+        parkinsons_diagnosis = "The person does not have Parkinson's disease"
     
 st.success(parkinsons_diagnosis)
+
+# Add background image using CSS
+st.markdown(
+    """
+    <style>
+    .stApp {
+        background-image: url("https://raw.githubusercontent.com/SHAIK-RAIYAN-2022-CSE/malaria/main/Images-free-abstract-minimalist-wallpaper-HD.jpg");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
