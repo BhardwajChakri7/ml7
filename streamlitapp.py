@@ -92,8 +92,10 @@ inputs = [
 
 # Create text inputs dynamically and distribute them across the columns
 input_values = {}
+num_inputs = len(inputs)
 for i, (label, default, min_val, max_val, step) in enumerate(inputs):
-    col = [col1, col2, col3][i // 7]  # 7 inputs per column
+    col_index = i % 3  # Use modulus to cycle through three columns
+    col = [col1, col2, col3][col_index]
     input_values[label] = create_input(label, default, min_val, max_val, step)
 
 # Prediction logic
@@ -103,7 +105,7 @@ parkinsons_diagnosis = ''
 if st.button("Parkinson's Test Result"):
     try:
         # Ensure we use the correct keys from input_values
-        input_data = [float(input_values[label]) for label in inputs]
+        input_data = [float(input_values[label]) for label in input_values]
         parkinsons_prediction = parkinsons_model.predict([input_data])                          
         
         if (parkinsons_prediction[0] == 1):
