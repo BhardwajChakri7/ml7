@@ -58,6 +58,16 @@ input {
 </style>
 """, unsafe_allow_html=True)
 
+# Location input
+state = st.selectbox(
+    'Select your location (Indian State)', 
+    ['', 'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh',
+     'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka',
+     'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram',
+     'Nagaland', 'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu',
+     'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal']
+)
+
 # Input fields in columns
 col1, col2, col3 = st.columns(3)
 
@@ -93,8 +103,6 @@ input_groups = [
         ('NHR', 0.2, 0.0, 1.0, 0.01),
         ('HNR', 20.0, 0.0, 50.0, 0.1),
         ('RPDE', 0.3, 0.0, 1.0, 0.01),
-        
-
     ]
 ]
 
@@ -111,19 +119,22 @@ parkinsons_diagnosis = ''
 
 # Creating a button for Prediction    
 if st.button("Parkinson's Test Result"):
-    try:
-        # Ensure we use the correct keys from input_values
-        input_data = [float(input_values[label]) for label in input_values]
-        parkinsons_prediction = parkinsons_model.predict([input_data])                          
-        
-        if (parkinsons_prediction[0] == 1):
-            parkinsons_diagnosis = "The person has Parkinson's disease"
-        else:
-            parkinsons_diagnosis = "The person does not have Parkinson's disease"
-    except ValueError:
-        parkinsons_diagnosis = "Please enter valid numerical values in all fields."
-    except KeyError as e:
-        parkinsons_diagnosis = f"Error: Missing input value for {e}."
+    if state == '':
+        st.error("Please select your location.")
+    else:
+        try:
+            # Ensure we use the correct keys from input_values
+            input_data = [float(input_values[label]) for label in input_values]
+            parkinsons_prediction = parkinsons_model.predict([input_data])                          
+            
+            if (parkinsons_prediction[0] == 1):
+                parkinsons_diagnosis = "The person has Parkinson's disease"
+            else:
+                parkinsons_diagnosis = "The person does not have Parkinson's disease"
+        except ValueError:
+            parkinsons_diagnosis = "Please enter valid numerical values in all fields."
+        except KeyError as e:
+            parkinsons_diagnosis = f"Error: Missing input value for {e}."
 
 # Display the result
 if parkinsons_diagnosis:
