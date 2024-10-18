@@ -23,6 +23,7 @@ st.markdown("""
 .block-container {
     background: rgba(0, 0, 0, 0.7);
     padding: 30px;
+    border: 2px solid #ccc;
     border-radius: 15px;
     max-width: 800px;
     margin: auto;
