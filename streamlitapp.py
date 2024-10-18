@@ -62,7 +62,7 @@ def create_input(label, default_value, min_value, max_value, step):
     return st.number_input(label, value=default_value, min_value=min_value, max_value=max_value, step=step)
 
 # Input fields in columns
-col1, col2, col3, col4, col5 = st.columns(5)
+col1, col2, col3 = st.columns(3)
 
 # List of input labels and their properties
 inputs = [
@@ -90,10 +90,10 @@ inputs = [
     ('PPE', 0.5, 0.0, 1.0, 0.01)
 ]
 
-# Create text inputs dynamically
+# Create text inputs dynamically and distribute them across the columns
 input_values = {}
 for i, (label, default, min_val, max_val, step) in enumerate(inputs):
-    col = [col1, col2, col3, col4, col5][i % 5]
+    col = [col1, col2, col3][i // 7]  # 7 inputs per column
     input_values[label] = create_input(label, default, min_val, max_val, step)
 
 # Prediction logic
@@ -103,7 +103,7 @@ parkinsons_diagnosis = ''
 if st.button("Parkinson's Test Result"):
     try:
         # Ensure we use the correct keys from input_values
-        input_data = [float(input_values[label]) for label, _, _, _, _ in inputs]
+        input_data = [float(input_values[label]) for label in inputs]
         parkinsons_prediction = parkinsons_model.predict([input_data])                          
         
         if (parkinsons_prediction[0] == 1):
