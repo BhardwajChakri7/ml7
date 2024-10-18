@@ -86,7 +86,8 @@ parkinsons_diagnosis = ''
 # Creating a button for Prediction    
 if st.button("Parkinson's Test Result"):
     try:
-        input_data = [float(input_values[label]) for label in inputs]
+        # Ensure we use the correct keys from input_values
+        input_data = [float(input_values[label]) for label, _ in inputs]
         parkinsons_prediction = parkinsons_model.predict([input_data])                          
         
         if (parkinsons_prediction[0] == 1):
@@ -95,6 +96,8 @@ if st.button("Parkinson's Test Result"):
             parkinsons_diagnosis = "The person does not have Parkinson's disease"
     except ValueError:
         parkinsons_diagnosis = "Please enter valid numerical values in all fields."
+    except KeyError as e:
+        parkinsons_diagnosis = f"Error: Missing input value for {e}."
 
 # Display the result
 if parkinsons_diagnosis:
