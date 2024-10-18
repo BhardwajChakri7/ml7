@@ -5,7 +5,7 @@ from streamlit_option_menu import option_menu
 
 # loading the saved models
 
-parkinsons_model = pickle.load(open('parkinsons_model.sav', 'rb'))
+parkinsons_model = pickle.load(open('parkinson_model.sav', 'rb'))
 
 # page title
 st.title("Parkinson's Disease Prediction using ML")
