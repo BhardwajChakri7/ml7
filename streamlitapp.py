@@ -1,15 +1,3 @@
-import pickle
-import streamlit as st
-from streamlit_option_menu import option_menu
-
-# Loading the saved models
-parkinsons_model = pickle.load(open('parkinson_model.sav', 'rb'))
-
-# Page title
-st.title("Parkinson's Disease Prediction using ML")
-
-# Adding CSS styles
-st.markdown("""
 <style>
 [data-testid="stAppViewContainer"] {
     background-image: url("https://raw.githubusercontent.com/SHAIK-RAIYAN-2022-CSE/malaria/main/Images-free-abstract-minimalist-wallpaper-HD.jpg");
@@ -22,8 +10,8 @@ st.markdown("""
     background: rgba(0, 0, 0, 0);
 }
 .block-container {
-    background: rgba(0, 0, 0, 0.7);
-    padding: 30px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 20px;
     border-radius: 15px;
     max-width: 800px;
     margin: auto;
@@ -34,7 +22,7 @@ st.markdown("""
     background-color: #FF6347;
     color: white;
     font-size: 18px;
-    padding: 12px 28px;
+    padding: 10px 24px;
     border-radius: 10px;
     border: none;
     transition: 0.3s;
@@ -48,45 +36,4 @@ h1, h2, h3, h4, h5, h6, p {
     color: white;
     text-align: center;
 }
-.text-input {
-    background-color: rgba(255, 255, 255, 0.8);
-    border: 1px solid #FF6347;
-    border-radius: 5px;
-    padding: 10px;
-}
 </style>
-""", unsafe_allow_html=True)
-
-# Input fields in columns
-col1, col2, col3, col4, col5 = st.columns(5)
-
-inputs = [
-    'MDVP:Fo(Hz)', 'MDVP:Fhi(Hz)', 'MDVP:Flo(Hz)', 
-    'MDVP:Jitter(%)', 'MDVP:Jitter(Abs)', 'MDVP:RAP', 
-    'MDVP:PPQ', 'Jitter:DDP', 'MDVP:Shimmer', 
-    'MDVP:Shimmer(dB)', 'Shimmer:APQ3', 'Shimmer:APQ5', 
-    'MDVP:APQ', 'Shimmer:DDA', 'NHR', 'HNR', 
-    'RPDE', 'DFA', 'spread1', 'spread2', 'D2', 'PPE'
-]
-
-# Create text inputs dynamically
-input_values = {}
-for i, label in enumerate(inputs):
-    col = [col1, col2, col3, col4, col5][i % 5]
-    input_values[label] = col.text_input(label, key=label)
-
-# Prediction logic
-parkinsons_diagnosis = ''
-
-# Creating a button for Prediction    
-if st.button("Parkinson's Test Result"):
-    input_data = [float(input_values[label]) for label in inputs]
-    parkinsons_prediction = parkinsons_model.predict([input_data])                          
-    
-    if (parkinsons_prediction[0] == 1):
-        parkinsons_diagnosis = "The person has Parkinson's disease"
-    else:
-        parkinsons_diagnosis = "The person does not have Parkinson's disease"
-
-# Display the result
-st.success(parkinsons_diagnosis)
