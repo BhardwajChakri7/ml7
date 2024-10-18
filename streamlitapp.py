@@ -50,8 +50,7 @@ h1, h2, h3, h4, h5, h6, p {
 }
 </style>
 ''',
-    unsafe_allow_html=True
-)
+st.markdown(page_bg_img, unsafe_allow_html=True)
 
 # Layout for input fields
 col1, col2, col3, col4, col5 = st.columns(5)  
